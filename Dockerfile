@@ -2,8 +2,10 @@
 # https://repo.openeuler.org/openEuler-22.03-LTS-SP3/docker_img/
 FROM openeuler-22.03-lts-sp3:latest
 
+COPY openEuler.repo /etc/yum.repos.d/
+
 # Install dependencies
-RUN yum update -y && \
+RUN yum clean all && yum makecache && yum update -y && \
     yum install -y \
     bzip2 \
     curl \
@@ -11,16 +13,18 @@ RUN yum update -y && \
     zsh \
     wget \
     util-linux-user \
+    gcc \
+    g++ \
     sudo
 
 # Change default shell to zsh
-RUN chsh -s /bin/zsh
+RUN chsh -s /bin/zsh && touch ~/.zshrc
 
 # Install Miniconda
-RUN wget --no-check-certificate -O /tmp/Miniconda3-latest-Linux-x86_64.sh  https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda-latest-Linux-x86_64.sh && \
+RUN wget --no-check-certificate -O /tmp/Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
     bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && \
-    rm /tmp/Miniconda3-latest-Linux-x86_64.sh
-    # /opt/conda/bin/conda clean --all --yes
+    rm /tmp/Miniconda3-latest-Linux-x86_64.sh && \
+    /opt/conda/bin/conda clean --all --yes
 
 ENV PATH="/opt/conda/bin:$PATH"
 
@@ -28,9 +32,8 @@ ENV PATH="/opt/conda/bin:$PATH"
 COPY .condarc /root/
 
 # Create Conda environments and install packages using pip
-RUN conda create -n tf1 python=3.7.5 -y && conda activate tf1 && pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow==1.15.0 numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools protobuf==3.20.0 scipy requests mpi4py easydict scikit-learn==0.20.0 attrs && \
-    conda deactivate && \
-    conda create -n tf2 python=3.7.5 -y && conda activate tf2 && pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow==2.6.5 numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools protobuf==3.20.0 scipy requests mpi4py easydict scikit-learn==0.20.0 attrs
+COPY create_conda_envs.sh /tmp/create_conda_envs.sh
+RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 # Install Linuxbrew
 RUN wget --no-check-certificate -O /tmp/install.sh https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh && \
