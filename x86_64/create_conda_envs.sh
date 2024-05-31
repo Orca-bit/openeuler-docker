@@ -20,7 +20,8 @@ conda deactivate
 conda create -n tf2 python=3.7.5 -y
 conda activate tf2
 # pip install tensorflow==2.6.5
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow==2.6.5 numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools protobuf==3.20.0 scipy requests mpi4py easydict scikit-learn==0.20.0 attrs
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow==2.6.5 numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools scipy requests mpi4py easydict scikit-learn==0.20.0 attrs
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple protobuf==3.20.0
 
 # Deactivate the environment
 conda deactivate

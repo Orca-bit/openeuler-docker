@@ -1,0 +1,62 @@
+# C++
+[[language]]
+name = "cpp"
+auto-format = false
+indent = { tab-width = 4, unit = "    " }
+
+[[language]]
+name = "cmake"
+auto-format = false
+indent = { tab-width = 4, unit = "    " }
+
+# Go
+[[language]]
+name = "go"
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+
+# Python
+[[language]]
+name = "python"
+roots = ["pyproject.toml", "pyrightconfig.json", "Poetry.lock"]
+auto-format = false
+indent = { tab-width = 4, unit = "    " }
+formatter = { command = "ruff format", args = ["--line-length=120"] }
+language-servers = ["pyright", "ruff"]
+
+[language-server.ruff]
+command = "ruff server"
+
+[language-server.pyright]
+command = "pyright-langserver"
+args = ["--stdio"]
+config = []
+
+# Rust
+[[language]]
+name = "rust"
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+
+[language-server.rust-analyzer.config]
+inlayHints.lifetimeElisionHints.enable = false
+
+# Bash
+[[language]]
+name = "bash"
+file-types = ["sh"]
+auto-format = false
+indent = { tab-width = 4, unit = "    " }
+
+# JSON
+[[language]]
+name = "json"
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+
+# TOML
+[[language]]
+name = "toml"
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+formatter = { command = "taplo", args = ["fmt", "-"] }
