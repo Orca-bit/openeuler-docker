@@ -30,21 +30,11 @@ jobs:
 
       # Step 5: Build the Docker image
       - name: Build Docker image
-        run: cd x86_64 && docker build -t openeuler-dev:origin .
-
-      # Step 6: Install docker-squash
-      - name: Install docker-squash
         run: |
-          sudo apt-get install -y python3-pip
-          pip3 install docker-squash
-
-      # Step 7: Squash the Docker image
-      - name: Squash Docker image
-        run: |
-          docker-squash -t openeuler-dev:latest openeuler-dev:origin
+          cd x86_64 && docker build -t openeuler-dev:latest .
           docker save openeuler-dev:latest -o openeuler-dev-x86_64.tar
 
-      # Step 8: Compress the squashed image into tar.xz
+      # Step 8: Compress the image into tar.xz
       - name: Compress squashed image
         run: |
           xz -z openeuler-dev-x86_64.tar
