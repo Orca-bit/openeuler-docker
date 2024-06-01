@@ -54,10 +54,10 @@ COPY .condarc /root/
 COPY create_conda_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
-ENV HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
-ENV HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
-ENV HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
-ENV HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+ENV HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+ENV HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+ENV HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+ENV HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
 
 # Create a non-root user for Homebrew
 RUN useradd -m -s /bin/bash brewuser && \
@@ -67,9 +67,9 @@ RUN useradd -m -s /bin/bash brewuser && \
 USER brewuser
 
 # Install Linuxbrew
-RUN wget --no-check-certificate -O /tmp/install.sh https://mirrors.ustc.edu.cn/misc/brew-install.sh && \
-    bash /tmp/install.sh && \
-    rm /tmp/install.sh
+RUN git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git /tmp/brew-install && \
+    bash /tmp/brew-install/install.sh && \
+    rm -rf /tmp/brew-install
 
 # Switch back to root user
 USER root
@@ -79,9 +79,6 @@ RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bash
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 ENV PATH="/home/linuxbrew/.linuxbrew/sbin:$PATH"
-
-# Install brew packages
-RUN brew install lsd cmake helix hyperfine ruff starship unzip tokei gitui broot git-delta vim fd zoxide bat
 
 # Install zsh auto suggestions plugin
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
@@ -103,8 +100,19 @@ COPY cargo_config.toml /root/.cargo/config.toml
 COPY helix/config.toml helix/languages.toml /root/.config/helix/
 COPY helix/themes/* /root/.config/helix/themes/
 
+# vim config
+RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
+    sh ~/.vim_runtime/install_basic_vimrc.sh && \
+    rm -rf ~/.vim_runtime
+
 # git config
 RUN git config --global http.sslverify false && git config --global core.editor vim
+
+# Install brew packages
+RUN brew install lsd cmake helix hyperfine ruff starship unzip tokei \
+                 gitui broot git-delta vim fd zoxide bat llvm ripgrep && \
+    ln -s /usr/lib64/libzstd.so.1 /home/linuxbrew/.linuxbrew/lib/libzstd.so.1 && \
+    ln -s /home/linuxbrew/.linuxbrew/bin/lldb-dap /home/linuxbrew/.linuxbrew/bin/lldb-vscode
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \

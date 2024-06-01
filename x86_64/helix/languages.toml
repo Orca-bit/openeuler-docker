@@ -19,13 +19,13 @@ indent = { tab-width = 4, unit = "    " }
 [[language]]
 name = "python"
 roots = ["pyproject.toml", "pyrightconfig.json", "Poetry.lock"]
-auto-format = false
+auto-format = true
 indent = { tab-width = 4, unit = "    " }
-formatter = { command = "ruff format", args = ["--line-length=120"] }
 language-servers = ["pyright", "ruff"]
 
 [language-server.ruff]
-command = "ruff server"
+command = "ruff"
+args = ["server", "--preview", "--config", "line-length=120"]
 
 [language-server.pyright]
 command = "pyright-langserver"
