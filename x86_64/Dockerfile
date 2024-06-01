@@ -26,11 +26,11 @@ RUN yum clean all && yum makecache && yum update -y && \
     glibc-devel \
     glibc-headers \
     glibc-static
-    
+
 COPY install_gcc.sh /tmp/
 
 RUN sh /tmp/install_gcc.sh && rm -f /tmp/install_gcc.sh
-    
+
 RUN yum install -y openmpi openmpi-devel
 
 ENV PATH="/usr/lib64/openmpi/bin:$PATH"
@@ -62,7 +62,7 @@ ENV HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/a
 # Create a non-root user for Homebrew
 RUN useradd -m -s /bin/bash brewuser && \
     echo 'brewuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-    
+
 # Switch to non-root user and install Homebrew
 USER brewuser
 
@@ -82,17 +82,23 @@ ENV PATH="/home/linuxbrew/.linuxbrew/sbin:$PATH"
 
 # Install zsh auto suggestions plugin
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-    
+
 ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
 # Install Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile
-    
+
 # install ra
 RUN /root/.cargo/bin/rustup component add rust-analyzer
-    
+
+# Install brew packages
+RUN brew install lsd cmake helix hyperfine ruff starship unzip tokei \
+    gitui broot git-delta vim fd zoxide bat llvm ripgrep && \
+    ln -s /usr/lib64/libzstd.so.1 /home/linuxbrew/.linuxbrew/lib/libzstd.so.1 && \
+    ln -s /home/linuxbrew/.linuxbrew/bin/lldb-dap /home/linuxbrew/.linuxbrew/bin/lldb-vscode
+
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
 
@@ -107,12 +113,6 @@ RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
 
 # git config
 RUN git config --global http.sslverify false && git config --global core.editor vim
-
-# Install brew packages
-RUN brew install lsd cmake helix hyperfine ruff starship unzip tokei \
-                 gitui broot git-delta vim fd zoxide bat llvm ripgrep && \
-    ln -s /usr/lib64/libzstd.so.1 /home/linuxbrew/.linuxbrew/lib/libzstd.so.1 && \
-    ln -s /home/linuxbrew/.linuxbrew/bin/lldb-dap /home/linuxbrew/.linuxbrew/bin/lldb-vscode
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
