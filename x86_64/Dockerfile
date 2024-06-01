@@ -131,7 +131,8 @@ RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
     echo 'alias py="python"' >> /root/.zshrc && \
     echo 'alias cg="cargo"' >> /root/.zshrc && \
     echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc && \
-    echo 'eval "$(starship init zsh)"' >> ~/.zshrc
+    echo 'eval "$(starship init zsh)"' >> ~/.zshrc && \
+    rm -rf /root/.cache/pyright-python/nodeenv
 
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
