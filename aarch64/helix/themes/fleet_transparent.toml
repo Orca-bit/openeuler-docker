@@ -1,0 +1,6 @@
+inherits = "fleet_dark"
+
+"ui.background" = {}
+"ui.statusline.normal" = { fg = "Gray 20", bg = "Blue 90" }
+"ui.statusline.insert" = { fg = "Gray 20", bg = "Yellow 60" }
+"ui.statusline.select" = { fg = "Gray 20", bg = "Purple 20" }

@@ -1,0 +1,62 @@
+# Theme
+theme = "fleet_transparent"
+
+# Editor
+[editor]
+line-number = "relative"
+cursorline = true
+true-color = true
+color-modes = true
+bufferline = "multiple"
+gutters = ["line-numbers", "diff", "diagnostics", "spacer"]
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.search]
+smart-case = true
+
+[editor.soft-wrap]
+enable = true
+
+[editor.file-picker]
+hidden = false
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+left = [
+  "mode",
+  "spacer",
+  "version-control",
+  "spacer",
+  "separator",
+  "file-name",
+  "file-modification-indicator",
+]
+right = [
+  "spinner",
+  "separator",
+  "spacer",
+  "diagnostics",
+  "position",
+  "position-percentage",
+  "file-encoding",
+  "file-line-ending",
+  "file-type",
+]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+# Keymap
+[keys.normal]
+g = { "left" = "goto_line_start", "right" = "goto_line_end" }
+
+[keys.select]
+g = { "left" = "goto_line_start", "right" = "goto_line_end" }
