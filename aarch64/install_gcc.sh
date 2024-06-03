@@ -3,15 +3,15 @@
 set -e
 
 # Set environment variables for library versions
-# GMP_VERSION=6.2.1
-# MPFR_VERSION=4.1.0
-# MPC_VERSION=1.2.1
+GMP_VERSION=6.1.0
+MPFR_VERSION=3.1.4
+MPC_VERSION=1.0.3
 GCC_VERSION=7.3.0
 
 # Set source URLs for the libraries
-# GMP_SOURCE_URL=https://mirrors.aliyun.com/gnu/gmp/gmp-${GMP_VERSION}.tar.bz2
-# MPFR_SOURCE_URL=https://mirrors.aliyun.com/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.bz2
-# MPC_SOURCE_URL=https://mirrors.aliyun.com/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
+GMP_SOURCE_URL=https://mirrors.aliyun.com/gnu/gmp/gmp-${GMP_VERSION}.tar.bz2
+MPFR_SOURCE_URL=https://mirrors.aliyun.com/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.bz2
+MPC_SOURCE_URL=https://mirrors.aliyun.com/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
 GCC_SOURCE_URL=https://mirrors.aliyun.com/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz
 
 # Set install dirs for the libraries
@@ -54,7 +54,10 @@ gcc_install_dir="/usr/local/gcc-$GCC_VERSION"
 wget --no-check-certificate ${GCC_SOURCE_URL} -O /tmp/gcc-${GCC_VERSION}.tar.gz
 tar -xzf /tmp/gcc-${GCC_VERSION}.tar.gz -C /tmp
 cd /tmp/gcc-${GCC_VERSION}
-./contrib/download_prerequisites
+# ./contrib/download_prerequisites
+wget --no-check-certificate ${GMP_SOURCE_URL} -O gmp-${GMP_VERSION}.tar.bz2
+wget --no-check-certificate ${MPFR_SOURCE_URL} -O mpfr-${MPFR_VERSION}.tar.bz2
+wget --no-check-certificate ${MPC_SOURCE_URL} -O mpc-${MPC_VERSION}.tar.gz
 # mkdir build
 # cd build
 # ./configure --prefix=${gcc_install_dir} --enable-threads=posix --enable-multiarch --disable-checking --enable--long-long --enable-languages=c,c++ --enable-multilib --with-gmp=${gmp_install_dir} --with-mpfr=${mpfr_install_dir} --with-mpc=${mpc_install_dir}
