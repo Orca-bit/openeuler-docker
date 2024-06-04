@@ -58,10 +58,14 @@ ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
 
 # Install Rust
 RUN yum install ca-certificates -y && \
-    wget --no-check-certificate -O /tmp/rustup-init.sh https://rsproxy.cn/rustup-init.sh && \ 
-    sh /tmp/rustup-init.sh -y && \
+    curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | SSL_CERT_DIR=/etc/ssl/certs sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile && \
     /root/.cargo/bin/rustup --version
+# RUN yum install ca-certificates -y && \
+#     wget --no-check-certificate -O /tmp/rustup-init.sh https://rsproxy.cn/rustup-init.sh && \ 
+#     sh /tmp/rustup-init.sh -y && \
+#     echo 'source $HOME/.cargo/env' >> /etc/profile && \
+#     /root/.cargo/bin/rustup --version
 
 #    sed -i '601s/curl /curl -k /; 607s/curl /curl -k /; 610s/curl /curl -k /' /tmp/rustup-init.sh && \
 
