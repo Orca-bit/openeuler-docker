@@ -56,18 +56,11 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosu
 ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
+ENV SSL_CERT_DIR="/etc/ssl/certs"
 # Install Rust
-RUN yum install ca-certificates -y && \
-    curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | SSL_CERT_DIR=/etc/ssl/certs sh -s -- -y && \
+RUN curl -k --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile && \
     /root/.cargo/bin/rustup --version
-# RUN yum install ca-certificates -y && \
-#     wget --no-check-certificate -O /tmp/rustup-init.sh https://rsproxy.cn/rustup-init.sh && \ 
-#     sh /tmp/rustup-init.sh -y && \
-#     echo 'source $HOME/.cargo/env' >> /etc/profile && \
-#     /root/.cargo/bin/rustup --version
-
-#    sed -i '601s/curl /curl -k /; 607s/curl /curl -k /; 610s/curl /curl -k /' /tmp/rustup-init.sh && \
 
 # install ra
 RUN /root/.cargo/bin/rustup component add rust-analyzer
