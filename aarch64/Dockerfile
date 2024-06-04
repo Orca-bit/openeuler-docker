@@ -57,16 +57,13 @@ ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
 # Install Rust
-RUN echo 'alias curl="curl -k"' >> ~/.bashrc && source ~/.bashrc && \ 
-    curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
-    echo 'source $HOME/.cargo/env' >> /etc/profile && \
-    /root/.cargo/bin/rustup --version
-
+# RUN echo 'alias curl="curl -k"' >> ~/.bashrc && source ~/.bashrc && \ 
+#     curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
+#     echo 'source $HOME/.cargo/env' >> /etc/profile && \
+#     /root/.cargo/bin/rustup --version
+# 
 # install ra
-RUN /root/.cargo/bin/rustup component add rust-analyzer
-
-# Update .condarc file to disable SSL verification and add conda-forge channel
-COPY .condarc /root/
+# RUN /root/.cargo/bin/rustup component add rust-analyzer
 
 COPY install_packages.sh /tmp/
 
@@ -83,6 +80,9 @@ COPY helix/themes/* /root/.config/helix/themes/
 RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
     sh ~/.vim_runtime/install_basic_vimrc.sh && \
     rm -rf ~/.vim_runtime
+
+# Update .condarc file to disable SSL verification and add conda-forge channel
+COPY .condarc /root/
 
 # Create Conda environments and install packages using pip
 COPY create_conda_envs.sh /tmp/create_conda_envs.sh

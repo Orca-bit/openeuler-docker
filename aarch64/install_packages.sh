@@ -12,6 +12,7 @@ yum install vim cmake unzip -y
 wget --no-check-certificate https://dystroy.org/broot/download/aarch64-unknown-linux-musl/broot -O /usr/bin/broot
 broot --version
 
+rust_version=1.78.0
 helix_version=24.03
 lsd_version=1.1.2
 hyperfine_version=1.18.0
@@ -19,6 +20,17 @@ ruff_version=0.4.7
 starship_version=1.19.0
 tokei_version=12.1.2
 gitui_version=0.26.3
+
+# rust
+rust_install_path="/usr/local/rust"
+wget --no-check-certificate https://static.rust-lang.org/dist/rust-$rust_version-aarch64-unknown-linux-gnu.tar.xz -O /tmp/rust.tar.xz
+mkdir -p $rust_install_path
+tar -xJf /tmp/rust.tar.xz -C $rust_install_path --strip-components=1
+cd $rust_install_path && ./install.sh --prefix=$rust_install_path
+rm /tmp/rust.tar.xz
+export PATH=$rust_install_path/bin:$PATH
+rustc --version
+echo "export PATH=$rust_install_path:\$PATH" >> /root/.zshrc
 
 # helix
 helix_install_path="/usr/local/helix"
