@@ -47,9 +47,6 @@ RUN wget --no-check-certificate -O /tmp/Miniconda3-latest-Linux-aarch64.sh https
 
 ENV PATH="/opt/conda/bin:$PATH"
 
-# Update .condarc file to disable SSL verification and add conda-forge channel
-COPY .condarc /root/
-
 # Install zsh auto suggestions plugin
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
@@ -62,6 +59,13 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh 
 
 # install ra
 RUN /root/.cargo/bin/rustup component add rust-analyzer
+
+# Update .condarc file to disable SSL verification and add conda-forge channel
+COPY .condarc /root/
+
+COPY install_packages.sh /tmp/
+
+RUN sh /tmp/install_packages.sh && rm /tmp/install_packages.sh
 
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
