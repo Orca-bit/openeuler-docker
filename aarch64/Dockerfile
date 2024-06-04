@@ -57,7 +57,7 @@ ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
 # Install Rust
-RUN alias curl='curl -k' && \ 
+RUN echo 'alias curl="curl -k"' >> ~/.bashrc && source ~/.bashrc && \ 
     curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile && \
     /root/.cargo/bin/rustup --version
