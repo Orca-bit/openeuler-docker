@@ -56,9 +56,9 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosu
 ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
-ENV SSL_CERT_DIR="/etc/ssl/certs"
 # Install Rust
-RUN curl -k --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
+RUN alias curl='curl -k' && \ 
+    curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile && \
     /root/.cargo/bin/rustup --version
 
