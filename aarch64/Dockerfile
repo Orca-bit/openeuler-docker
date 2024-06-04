@@ -50,36 +50,6 @@ ENV PATH="/opt/conda/bin:$PATH"
 # Update .condarc file to disable SSL verification and add conda-forge channel
 COPY .condarc /root/
 
-# Create Conda environments and install packages using pip
-COPY create_conda_envs.sh /tmp/create_conda_envs.sh
-RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
-
-ENV HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-ENV HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-ENV HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-ENV HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
-
-# Create a non-root user for Homebrew
-RUN useradd -m -s /bin/bash brewuser && \
-    echo 'brewuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Switch to non-root user and install Homebrew
-USER brewuser
-
-# Install Linuxbrew
-RUN git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git /tmp/brew-install && \
-    bash /tmp/brew-install/install.sh && \
-    rm -rf /tmp/brew-install
-
-# Switch back to root user
-USER root
-
-RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc && \
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.zshrc
-
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-ENV PATH="/home/linuxbrew/.linuxbrew/sbin:$PATH"
-
 # Install zsh auto suggestions plugin
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
@@ -92,12 +62,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh 
 
 # install ra
 RUN /root/.cargo/bin/rustup component add rust-analyzer
-
-# Install brew packages
-RUN brew install lsd cmake helix hyperfine ruff starship unzip tokei \
-    gitui broot git-delta vim fd zoxide bat llvm ripgrep && \
-    ln -s /usr/lib64/libzstd.so.1 /home/linuxbrew/.linuxbrew/lib/libzstd.so.1 && \
-    ln -s /home/linuxbrew/.linuxbrew/bin/lldb-dap /home/linuxbrew/.linuxbrew/bin/lldb-vscode
 
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
@@ -113,6 +77,10 @@ RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
 
 # git config
 RUN git config --global http.sslverify false && git config --global core.editor vim
+
+# Create Conda environments and install packages using pip
+COPY create_conda_envs.sh /tmp/create_conda_envs.sh
+RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
