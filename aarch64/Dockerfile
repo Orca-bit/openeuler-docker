@@ -69,8 +69,15 @@ RUN /tmp/install_packages.sh rust & \
     /tmp/install_packages.sh tokei & \
     /tmp/install_packages.sh gitui & \
     /tmp/install_packages.sh broot & \
+    /tmp/install_packages.sh delta & \
+    /tmp/install_packages.sh fd & \
+    /tmp/install_packages.sh zoxide & \
+    /tmp/install_packages.sh bat & \
+    /tmp/install_packages.sh ripgrep & \
     wait && \
-    yum install vim cmake unzip -y && rm /tmp/install_packages.sh
+    rm /tmp/install_packages.sh
+
+RUN yum install vim cmake unzip llvm -y
 
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
