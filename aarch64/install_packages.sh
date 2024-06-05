@@ -25,6 +25,7 @@ tar -xJf /tmp/rust.tar.xz -C $rust_install_path --strip-components=1
 cd $rust_install_path && ./install.sh --prefix=/usr/local
 rm /tmp/rust.tar.xz
 rustc --version
+rust-analyzer --version
 
 # helix
 helix_install_path="/usr/local/helix"
