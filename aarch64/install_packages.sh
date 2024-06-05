@@ -108,7 +108,7 @@ function install_gitui() {
 
 # broot
 function install_broot() {
-    wget --no-check-certificate https://dystroy.org/broot/download/aarch64-unknown-linux-musl/broot -O /usr/bin/broot
+    wget --no-check-certificate https://dystroy.org/broot/download/aarch64-unknown-linux-musl/broot -O /usr/local/bin/broot
     broot --version
 }
 
