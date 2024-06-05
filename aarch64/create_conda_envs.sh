@@ -2,6 +2,8 @@
 
 set -e
 
+yum install libffi-devel hdf5-devel -y
+
 conda init
 
 # source ~/.zshrc
