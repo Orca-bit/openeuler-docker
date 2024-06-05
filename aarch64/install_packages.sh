@@ -22,7 +22,7 @@ rust_install_path="/usr/local/rust"
 wget --no-check-certificate https://static.rust-lang.org/dist/rust-$rust_version-aarch64-unknown-linux-gnu.tar.xz -O /tmp/rust.tar.xz
 mkdir -p $rust_install_path
 tar -xJf /tmp/rust.tar.xz -C $rust_install_path --strip-components=1
-cd $rust_install_path && ./install.sh --prefix=/usr/bin
+cd $rust_install_path && ./install.sh --prefix=/usr/local
 rm /tmp/rust.tar.xz
 rustc --version
 
