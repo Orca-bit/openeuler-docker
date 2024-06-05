@@ -44,7 +44,7 @@ function install_lsd() {
     wget --no-check-certificate https://github.com/lsd-rs/lsd/releases/download/v$lsd_version/lsd-v$lsd_version-aarch64-unknown-linux-musl.tar.gz -O /tmp/lsd.tar.gz
     mkdir -p $lsd_install_path
     tar -xzf /tmp/lsd.tar.gz -C $lsd_install_path
-    mv -rf $lsd_install_path/lsd*/* $lsd_install_path/
+    mv -f $lsd_install_path/lsd*/* $lsd_install_path/
     $lsd_install_path/lsd --version
     rm /tmp/lsd.tar.gz
     echo "export PATH=$lsd_install_path:\$PATH" >> /root/.zshrc
@@ -56,7 +56,7 @@ function install_hyperfine() {
     wget --no-check-certificate https://github.com/sharkdp/hyperfine/releases/download/v$hyperfine_version/hyperfine-v$hyperfine_version-aarch64-unknown-linux-gnu.tar.gz -O /tmp/hyperfine.tar.gz
     mkdir -p $hyperfine_install_path
     tar -xzf /tmp/hyperfine.tar.gz -C $hyperfine_install_path
-    mv -rf $hyperfine_install_path/hyperfine*/* $hyperfine_install_path/
+    mv -f $hyperfine_install_path/hyperfine*/* $hyperfine_install_path/
     $hyperfine_install_path/hyperfine --version
     rm /tmp/hyperfine.tar.gz
     echo "export PATH=$hyperfine_install_path:\$PATH" >> /root/.zshrc

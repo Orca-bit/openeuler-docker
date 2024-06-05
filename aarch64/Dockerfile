@@ -56,27 +56,19 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosu
 ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
-# Install Rust
-# RUN echo 'alias curl="curl -k"' >> ~/.bashrc && source ~/.bashrc && \ 
-#     curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
-#     echo 'source $HOME/.cargo/env' >> /etc/profile && \
-#     /root/.cargo/bin/rustup --version
-# 
-# install ra
-# RUN /root/.cargo/bin/rustup component add rust-analyzer
-
+# Install precompiled packages
 COPY install_packages.sh /tmp/
 
-RUN sh /tmp/install_packages.sh rust
-RUN sh /tmp/install_packages.sh helix
-RUN sh /tmp/install_packages.sh lsd
-RUN sh /tmp/install_packages.sh hyperfine
-RUN sh /tmp/install_packages.sh ruff
-RUN sh /tmp/install_packages.sh starship
-RUN sh /tmp/install_packages.sh tokei
-RUN sh /tmp/install_packages.sh gitui
-RUN sh /tmp/install_packages.sh broot
-RUN yum install vim cmake unzip -y && rm /tmp/install_packages.sh
+RUN sh /tmp/install_packages.sh rust && \
+    sh /tmp/install_packages.sh helix && \
+    sh /tmp/install_packages.sh lsd && \
+    sh /tmp/install_packages.sh hyperfine && \
+    sh /tmp/install_packages.sh ruff && \
+    sh /tmp/install_packages.sh starship && \
+    sh /tmp/install_packages.sh tokei && \
+    sh /tmp/install_packages.sh gitui && \
+    sh /tmp/install_packages.sh broot && \
+    yum install vim cmake unzip -y && rm /tmp/install_packages.sh
 
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
