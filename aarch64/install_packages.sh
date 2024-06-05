@@ -8,10 +8,6 @@ set -e
 
 yum install vim cmake unzip -y
 
-# broot
-wget --no-check-certificate https://dystroy.org/broot/download/aarch64-unknown-linux-musl/broot -O /usr/bin/broot
-broot --version
-
 rust_version=1.78.0
 helix_version=24.03
 lsd_version=1.1.2
@@ -92,3 +88,7 @@ tar -xzf /tmp/gitui.tar.gz -C $gitui_install_path
 $gitui_install_path/gitui --version
 rm /tmp/gitui.tar.gz
 echo "export PATH=$gitui_install_path:\$PATH" >> /root/.zshrc
+
+# broot
+wget --no-check-certificate https://dystroy.org/broot/download/aarch64-unknown-linux-musl/broot -O /usr/bin/broot
+broot --version
