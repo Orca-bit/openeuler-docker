@@ -67,7 +67,16 @@ ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
 
 COPY install_packages.sh /tmp/
 
-RUN sh /tmp/install_packages.sh && rm /tmp/install_packages.sh
+RUN sh /tmp/install_packages.sh rust
+RUN sh /tmp/install_packages.sh helix
+RUN sh /tmp/install_packages.sh lsd
+RUN sh /tmp/install_packages.sh hyperfine
+RUN sh /tmp/install_packages.sh ruff
+RUN sh /tmp/install_packages.sh starship
+RUN sh /tmp/install_packages.sh tokei
+RUN sh /tmp/install_packages.sh gitui
+RUN sh /tmp/install_packages.sh broot
+RUN yum install vim cmake unzip -y && rm /tmp/install_packages.sh
 
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
