@@ -14,6 +14,8 @@ delta_version=0.17.0
 fd_version=10.1.0
 z_version=0.9.4
 bat_version=0.24.0
+ripgrep_version=14.1.0
+llvm_version=18.1.6
 
 github_boost=https://github.moeyy.xyz/
 
@@ -62,7 +64,7 @@ function install_bat() {
 
 function install_ripgrep() {
     ripgrep_install_path="/usr/local/ripgrep"
-    wget --no-check-certificate -O /tmp/ripgrep.tar.gz ${github_boost}https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep-14.1.0-aarch64-unknown-linux-gnu.tar.gz
+    wget --no-check-certificate -O /tmp/ripgrep.tar.gz ${github_boost}https://github.com/BurntSushi/ripgrep/releases/download/$ripgrep_version/ripgrep-$ripgrep_version-aarch64-unknown-linux-gnu.tar.gz
     mkdir -p $ripgrep_install_path
     tar -xzf /tmp/ripgrep.tar.gz -C $ripgrep_install_path
     mv -f $ripgrep_install_path/ripgrep*/* $ripgrep_install_path/
@@ -81,6 +83,17 @@ function install_rust() {
     rm /tmp/rust.tar.xz
     rustc --version
     rust-analyzer --version
+}
+
+function install_llvm() {
+    llvm_install_path="/usr/local/llvm"
+    wget --no-check-certificate -O /tmp/llvm.tar.xz ${github_boost}https://github.com/llvm/llvm-project/releases/download/llvmorg-$llvm_version/clang+llvm-$llvm_version-aarch64-linux-gnu.tar.xz
+    mkdir -p $llvm_install_path
+    tar -xJf /tmp/llvm.tar.xz -C $llvm_install_path --strip-components=1
+    $llvm_install_path/bin/clangd --version
+    ln -s $llvm_install_path/bin/lldb-dap $llvm_install_path/bin/lldb-vscode
+    rm /tmp/llvm.tar.xz
+    echo "export PATH=$llvm_install_path/bin:\$PATH" >> /root/.zshrc
 }
 
 # helix

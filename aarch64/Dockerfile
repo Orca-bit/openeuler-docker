@@ -26,7 +26,7 @@ RUN yum clean all && yum makecache && yum update -y && \
     kernel-headers \
     glibc-devel \
     glibc-headers \
-    glibc-static vim cmake unzip llvm openmpi openmpi-devel
+    glibc-static vim cmake unzip openmpi openmpi-devel
 
 ENV PATH="/usr/lib64/openmpi/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH"
