@@ -52,7 +52,8 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosu
 COPY install_packages.sh /tmp/
 RUN chmod +x /tmp/install_packages.sh
 
-RUN /tmp/install_packages.sh rust && \
+RUN /tmp/install_packages.sh llvm && \
+    /tmp/install_packages.sh rust && \
     /tmp/install_packages.sh helix && \
     /tmp/install_packages.sh lsd && \
     /tmp/install_packages.sh hyperfine && \

@@ -212,4 +212,7 @@ elif [[ $sw == "bat" ]];then
     install_bat
 elif [[ $sw == "ripgrep" ]];then
     install_ripgrep
+elif [[ $sw == "llvm" ]];then
+    install_llvm
+fi
 fi
