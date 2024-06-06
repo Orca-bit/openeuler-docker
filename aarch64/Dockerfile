@@ -94,6 +94,12 @@ RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
     update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
     update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
 
+# Ascend
+RUN wget --no-check-certificate -O /tmp/cann-toolkit.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-toolkit_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
+    wget --no-check-certificate -O /tmp/tfa.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-tfplugin_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
+    cd /tmp && chmod +x *.run && ./cann-toolkit.run --full --silent && ./tfa.run --install --silent && \
+    rm /tmp/*.run
+
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
     echo 'source /opt/conda/etc/profile.d/conda.sh' >> /root/.zshrc && \
@@ -112,6 +118,9 @@ RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
     echo 'alias cg="cargo"' >> /root/.zshrc && \
     echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc && \
     echo 'eval "$(starship init zsh)"' >> ~/.zshrc && \
+    echo 'source /usr/local/Ascend/driver/bin/setenv.bash' >> /root/.zshrc  && \
+    echo 'source /usr/local/Ascend/ascend-toolkit/set_env.sh' >> /root/.zshrc && \
+    echo 'source /usr/local/Ascend/tfplugin/set_env.sh' >> /root/.zshrc && \
     rm -rf /root/.cache/pyright-python/nodeenv && \
     sed -i '81s/==/=/g' /etc/profile.d/system-info.sh
 

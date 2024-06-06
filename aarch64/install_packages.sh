@@ -215,4 +215,3 @@ elif [[ $sw == "ripgrep" ]];then
 elif [[ $sw == "llvm" ]];then
     install_llvm
 fi
-fi
