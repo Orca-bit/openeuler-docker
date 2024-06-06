@@ -84,7 +84,11 @@ RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
 COPY .condarc /root/
 
 # Create Conda environments and install packages using pip
-COPY create_conda_envs.sh /tmp/create_conda_envs.sh
+COPY create_conda_tf1_envs.sh /tmp/create_conda_envs.sh
+RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
+
+# Create Conda environments and install packages using pip
+COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 # Configure zsh
