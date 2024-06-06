@@ -92,7 +92,9 @@ RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 # Create Conda environments and install packages using pip
 COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
-RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
+RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh && \
+    source ~/.bashrc && conda activate tf2 && \
+    pip install numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools scipy requests mpi4py easydict scikit-learn==0.20.0 attrs pyright
 
 # Ascend
 RUN wget --no-check-certificate -O /tmp/cann-toolkit.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-toolkit_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \

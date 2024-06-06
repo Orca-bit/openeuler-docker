@@ -16,7 +16,6 @@ conda activate tf2
 # pip install tensorflow==2.6.5
 pip install /tmp/h5py-3.1.0-cp37-cp37m-manylinux2014_aarch64.whl
 pip install /tmp/tensorflow-2.6.5-cp37-cp37m-manylinux2014_aarch64.whl
-pip install numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools scipy requests mpi4py easydict scikit-learn==0.20.0 attrs pyright
 
 # Deactivate the environment
 conda deactivate
