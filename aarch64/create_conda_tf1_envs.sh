@@ -17,8 +17,8 @@ wget --no-check-certificate -O /tmp/tensorflow-1.15.0-cp37-cp37m-manylinux2014_a
 # activate tf1.15 environment, then install packages
 conda activate tf1
 python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip
-pip config set global.index-url http://pypi.douban.com/simple/
-pip config set install.trusted-host pypi.douban.com
+pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/
+pip config set install.trusted-host mirrors.aliyun.com
 # pip install tensorflow==1.15.0
 pip install /tmp/tensorflow-1.15.0-cp37-cp37m-manylinux2014_aarch64.whl
 pip install numpy decorator sympy==1.4 cffi==1.12.3 pyyaml pathlib2 pandas grpcio grpcio-tools protobuf==3.20.0 scipy requests mpi4py easydict scikit-learn==0.20.0 attrs
