@@ -15,9 +15,11 @@ fd_version=10.1.0
 z_version=0.9.4
 bat_version=0.24.0
 
+github_boost=https://github.moeyy.xyz/
+
 function install_delta() {
     delta_install_path="/usr/local/delta"
-    wget --no-check-certificate -O /tmp/delta.tar.gz https://github.com/dandavison/delta/releases/download/$delta_version/delta-$delta_version-aarch64-unknown-linux-gnu.tar.gz
+    wget --no-check-certificate -O /tmp/delta.tar.gz ${github_boost}https://github.com/dandavison/delta/releases/download/$delta_version/delta-$delta_version-aarch64-unknown-linux-gnu.tar.gz
     mkdir -p $delta_install_path
     tar -xzf /tmp/delta.tar.gz -C $delta_install_path
     mv -f $delta_install_path/delta*/* $delta_install_path/
@@ -28,7 +30,7 @@ function install_delta() {
 
 function install_fd() {
     fd_install_path="/usr/local/fd"
-    wget --no-check-certificate -O /tmp/fd.tar.gz https://github.com/sharkdp/fd/releases/download/v$fd_version/fd-v$fd_version-aarch64-unknown-linux-musl.tar.gz
+    wget --no-check-certificate -O /tmp/fd.tar.gz ${github_boost}https://github.com/sharkdp/fd/releases/download/v$fd_version/fd-v$fd_version-aarch64-unknown-linux-musl.tar.gz
     mkdir -p $fd_install_path
     tar -xzf /tmp/fd.tar.gz -C $fd_install_path
     mv -f $fd_install_path/fd*/* $fd_install_path/
@@ -39,7 +41,7 @@ function install_fd() {
 
 function install_zoxide() {
     z_install_path="/usr/local/zoxide"
-    wget --no-check-certificate -O /tmp/zoxide.tar.gz https://github.com/ajeetdsouza/zoxide/releases/download/v$z_version/zoxide-$z_version-aarch64-unknown-linux-musl.tar.gz
+    wget --no-check-certificate -O /tmp/zoxide.tar.gz ${github_boost}https://github.com/ajeetdsouza/zoxide/releases/download/v$z_version/zoxide-$z_version-aarch64-unknown-linux-musl.tar.gz
     mkdir -p $z_install_path
     tar -xzf /tmp/zoxide.tar.gz -C $z_install_path
     $z_install_path/zoxide --version
@@ -49,7 +51,7 @@ function install_zoxide() {
 
 function install_bat() {
     bat_install_path="/usr/local/bat"
-    wget --no-check-certificate -O /tmp/bat.tar.gz https://github.com/sharkdp/bat/releases/download/v$bat_version/bat-v$bat_version-aarch64-unknown-linux-gnu.tar.gz
+    wget --no-check-certificate -O /tmp/bat.tar.gz ${github_boost}https://github.com/sharkdp/bat/releases/download/v$bat_version/bat-v$bat_version-aarch64-unknown-linux-gnu.tar.gz
     mkdir -p $bat_install_path
     tar -xzf /tmp/bat.tar.gz -C $bat_install_path
     mv -f $bat_install_path/bat*/* $bat_install_path/
@@ -60,7 +62,7 @@ function install_bat() {
 
 function install_ripgrep() {
     ripgrep_install_path="/usr/local/ripgrep"
-    wget --no-check-certificate -O /tmp/ripgrep.tar.gz https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep-14.1.0-aarch64-unknown-linux-gnu.tar.gz
+    wget --no-check-certificate -O /tmp/ripgrep.tar.gz ${github_boost}https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep-14.1.0-aarch64-unknown-linux-gnu.tar.gz
     mkdir -p $ripgrep_install_path
     tar -xzf /tmp/ripgrep.tar.gz -C $ripgrep_install_path
     mv -f $ripgrep_install_path/ripgrep*/* $ripgrep_install_path/
@@ -84,7 +86,7 @@ function install_rust() {
 # helix
 function install_helix() {
     helix_install_path="/usr/local/helix"
-    wget --no-check-certificate -O /tmp/helix.tar.xz https://github.com/helix-editor/helix/releases/download/$helix_version/helix-$helix_version-aarch64-linux.tar.xz
+    wget --no-check-certificate -O /tmp/helix.tar.xz ${github_boost}https://github.com/helix-editor/helix/releases/download/$helix_version/helix-$helix_version-aarch64-linux.tar.xz
     mkdir -p $helix_install_path
     tar -xJf /tmp/helix.tar.xz -C $helix_install_path --strip-components=1
     $helix_install_path/hx --version
@@ -95,7 +97,7 @@ function install_helix() {
 # lsd
 function install_lsd() {
     lsd_install_path="/usr/local/lsd"
-    wget --no-check-certificate https://github.com/lsd-rs/lsd/releases/download/v$lsd_version/lsd-v$lsd_version-aarch64-unknown-linux-musl.tar.gz -O /tmp/lsd.tar.gz
+    wget --no-check-certificate ${github_boost}https://github.com/lsd-rs/lsd/releases/download/v$lsd_version/lsd-v$lsd_version-aarch64-unknown-linux-musl.tar.gz -O /tmp/lsd.tar.gz
     mkdir -p $lsd_install_path
     tar -xzf /tmp/lsd.tar.gz -C $lsd_install_path
     mv -f $lsd_install_path/lsd*/* $lsd_install_path/
@@ -107,7 +109,7 @@ function install_lsd() {
 # hyperfine
 function install_hyperfine() {
     hyperfine_install_path="/usr/local/hyperfine"
-    wget --no-check-certificate https://github.com/sharkdp/hyperfine/releases/download/v$hyperfine_version/hyperfine-v$hyperfine_version-aarch64-unknown-linux-gnu.tar.gz -O /tmp/hyperfine.tar.gz
+    wget --no-check-certificate ${github_boost}https://github.com/sharkdp/hyperfine/releases/download/v$hyperfine_version/hyperfine-v$hyperfine_version-aarch64-unknown-linux-gnu.tar.gz -O /tmp/hyperfine.tar.gz
     mkdir -p $hyperfine_install_path
     tar -xzf /tmp/hyperfine.tar.gz -C $hyperfine_install_path
     mv -f $hyperfine_install_path/hyperfine*/* $hyperfine_install_path/
@@ -119,7 +121,7 @@ function install_hyperfine() {
 # ruff
 function install_ruff() {
     ruff_install_path="/usr/local/ruff"
-    wget --no-check-certificate https://github.com/astral-sh/ruff/releases/download/v$ruff_version/ruff-$ruff_version-aarch64-unknown-linux-musl.tar.gz -O /tmp/ruff.tar.gz
+    wget --no-check-certificate ${github_boost}https://github.com/astral-sh/ruff/releases/download/v$ruff_version/ruff-$ruff_version-aarch64-unknown-linux-musl.tar.gz -O /tmp/ruff.tar.gz
     mkdir -p $ruff_install_path
     tar -xzf /tmp/ruff.tar.gz -C $ruff_install_path
     $ruff_install_path/ruff --version
@@ -130,7 +132,7 @@ function install_ruff() {
 # starship
 function install_starship() {
     starship_install_path="/usr/local/starship"
-    wget --no-check-certificate https://github.com/starship/starship/releases/download/v$starship_version/starship-aarch64-unknown-linux-musl.tar.gz -O /tmp/starship.tar.gz
+    wget --no-check-certificate ${github_boost}https://github.com/starship/starship/releases/download/v$starship_version/starship-aarch64-unknown-linux-musl.tar.gz -O /tmp/starship.tar.gz
     mkdir -p $starship_install_path
     tar -xzf /tmp/starship.tar.gz -C $starship_install_path
     $starship_install_path/starship --version
@@ -141,7 +143,7 @@ function install_starship() {
 # tokei
 function install_tokei() {
     tokei_install_path="/usr/local/tokei"
-    wget --no-check-certificate https://github.com/XAMPPRocky/tokei/releases/download/v$tokei_version/tokei-aarch64-unknown-linux-gnu.tar.gz -O /tmp/tokei.tar.gz
+    wget --no-check-certificate ${github_boost}https://github.com/XAMPPRocky/tokei/releases/download/v$tokei_version/tokei-aarch64-unknown-linux-gnu.tar.gz -O /tmp/tokei.tar.gz
     mkdir -p $tokei_install_path
     tar -xzf /tmp/tokei.tar.gz -C $tokei_install_path
     $tokei_install_path/tokei --version
@@ -152,7 +154,7 @@ function install_tokei() {
 # gitui
 function install_gitui() {
     gitui_install_path="/usr/local/gitui"
-    wget --no-check-certificate https://github.com/extrawurst/gitui/releases/download/v0.26.3/gitui-linux-aarch64.tar.gz -O /tmp/gitui.tar.gz
+    wget --no-check-certificate ${github_boost}https://github.com/extrawurst/gitui/releases/download/v0.26.3/gitui-linux-aarch64.tar.gz -O /tmp/gitui.tar.gz
     mkdir -p $gitui_install_path
     tar -xzf /tmp/gitui.tar.gz -C $gitui_install_path
     $gitui_install_path/gitui --version
