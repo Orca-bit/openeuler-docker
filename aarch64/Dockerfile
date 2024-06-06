@@ -80,9 +80,6 @@ RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
     sh ~/.vim_runtime/install_basic_vimrc.sh && \
     rm -rf ~/.vim_runtime
 
-# Update .condarc file to disable SSL verification and add conda-forge channel
-COPY .condarc /root/
-
 # Create Conda environments and install packages using pip
 COPY create_conda_tf1_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
