@@ -95,8 +95,8 @@ COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 # Ascend
-RUN wget --no-check-certificate -O /tmp/cann-toolkit.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-toolkit_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
-    wget --no-check-certificate -O /tmp/tfa.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-tfplugin_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
+RUN wget -q --no-check-certificate -O /tmp/cann-toolkit.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-toolkit_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
+    wget -q --no-check-certificate -O /tmp/tfa.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-tfplugin_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
     cd /tmp && chmod +x *.run && ./cann-toolkit.run --full --force --quiet && ./tfa.run --install --quiet && \
     rm /tmp/*.run
 
