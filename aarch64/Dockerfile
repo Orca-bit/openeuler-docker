@@ -8,11 +8,9 @@ FROM openeuler-22.03-lts-sp3:latest
 
 COPY openEuler.repo /etc/yum.repos.d/
 
-COPY install_gcc.sh /tmp/
-
 # Install dependencies
 RUN yum clean all && yum makecache && yum update -y && \
-    sh /tmp/install_gcc.sh && rm -f /tmp/install_gcc.sh && \
+    dnf install gcc-toolset-7-gcc gcc-toolset-7-g++ -y && \
     yum install -y \
     bzip2 \
     curl \
@@ -88,6 +86,13 @@ RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 # Create Conda environments and install packages using pip
 COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
+
+ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
+
+# replace gcc g++
+RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
+    update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
