@@ -79,6 +79,11 @@ RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
     sh ~/.vim_runtime/install_basic_vimrc.sh && \
     rm -rf ~/.vim_runtime
 
+# replace gcc g++
+RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
+    update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
+
 # Create Conda environments and install packages using pip
 COPY create_conda_tf1_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
@@ -88,11 +93,6 @@ COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
-
-# replace gcc g++
-RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
-    update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
-    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
 
 # Ascend
 RUN wget --no-check-certificate -O /tmp/cann-toolkit.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-toolkit_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
