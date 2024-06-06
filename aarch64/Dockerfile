@@ -8,8 +8,11 @@ FROM openeuler-22.03-lts-sp3:latest
 
 COPY openEuler.repo /etc/yum.repos.d/
 
+COPY install_gcc.sh /tmp/
+
 # Install dependencies
 RUN yum clean all && yum makecache && yum update -y && \
+    sh /tmp/install_gcc.sh && rm -f /tmp/install_gcc.sh && \
     yum install -y \
     bzip2 \
     curl \
@@ -20,18 +23,10 @@ RUN yum clean all && yum makecache && yum update -y && \
     sudo \
     make \
     m4 \
-    gcc \
-    gcc-c++ \
     kernel-headers \
     glibc-devel \
     glibc-headers \
-    glibc-static
-
-COPY install_gcc.sh /tmp/
-
-RUN sh /tmp/install_gcc.sh && rm -f /tmp/install_gcc.sh
-
-RUN yum install -y openmpi openmpi-devel
+    glibc-static vim cmake unzip llvm openmpi openmpi-devel
 
 ENV PATH="/usr/lib64/openmpi/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH"
@@ -53,31 +48,25 @@ RUN git config --global http.sslverify false && git config --global core.editor 
 # Install zsh auto suggestions plugin
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
-ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
-ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
-
 # Install precompiled packages
 COPY install_packages.sh /tmp/
 RUN chmod +x /tmp/install_packages.sh
 
-RUN /tmp/install_packages.sh rust & \
-    /tmp/install_packages.sh helix & \
-    /tmp/install_packages.sh lsd & \
-    /tmp/install_packages.sh hyperfine & \
-    /tmp/install_packages.sh ruff & \
-    /tmp/install_packages.sh starship & \
-    /tmp/install_packages.sh tokei & \
-    /tmp/install_packages.sh gitui & \
-    /tmp/install_packages.sh broot & \
-    /tmp/install_packages.sh delta & \
-    /tmp/install_packages.sh fd & \
-    /tmp/install_packages.sh zoxide & \
-    /tmp/install_packages.sh bat & \
-    /tmp/install_packages.sh ripgrep & \
-    wait && \
+RUN /tmp/install_packages.sh rust && \
+    /tmp/install_packages.sh helix && \
+    /tmp/install_packages.sh lsd && \
+    /tmp/install_packages.sh hyperfine && \
+    /tmp/install_packages.sh ruff && \
+    /tmp/install_packages.sh starship && \
+    /tmp/install_packages.sh tokei && \
+    /tmp/install_packages.sh gitui && \
+    /tmp/install_packages.sh broot && \
+    /tmp/install_packages.sh delta && \
+    /tmp/install_packages.sh fd && \
+    /tmp/install_packages.sh zoxide && \
+    /tmp/install_packages.sh bat && \
+    /tmp/install_packages.sh ripgrep && \
     rm /tmp/install_packages.sh
-
-RUN yum install vim cmake unzip llvm -y
 
 # cargo config
 COPY cargo_config.toml /root/.cargo/config.toml
