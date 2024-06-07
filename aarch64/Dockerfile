@@ -85,11 +85,11 @@ ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
 
 # replace gcc g++
 RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
-    mv -f /usr/bin/g++ /usr/bin/g++.bak && \
-    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
     update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
-    update-alternatives --install /usr/bin/c++ g++ ${gcc7_install_dir}/bin/c++ 100 && \
-    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
+    mv -f /usr/bin/g++ /usr/bin/g++.bak && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
+    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
+    update-alternatives --install /usr/bin/c++ g++ ${gcc7_install_dir}/bin/c++ 100
 
 # Create Conda environments and install packages using pip
 COPY create_conda_tf1_envs.sh /tmp/create_conda_envs.sh
