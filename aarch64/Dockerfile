@@ -124,6 +124,9 @@ RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
     echo 'source /usr/local/Ascend/tfplugin/set_env.sh' >> /root/.zshrc && \
     sed -i '81s/==/=/g' /etc/profile.d/system-info.sh
     
+RUN echo "strict-ssl=false" >> /root/.npmrc && \
+    echo "registry=https://registry.npm.taobao.org" >> /root/.npmrc
+
 # install node and pyright
 RUN curl -k -o /tmp/node.tar.xz https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-arm64.tar.xz && \
     mkdir -p /usr/local/node && \
