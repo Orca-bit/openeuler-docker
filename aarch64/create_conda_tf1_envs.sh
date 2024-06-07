@@ -21,11 +21,6 @@ pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/
 pip config set install.trusted-host mirrors.aliyun.com
 # pip install tensorflow==1.15.0
 pip install /tmp/tensorflow-1.15.0-cp37-cp37m-manylinux2014_aarch64.whl
-pip install numpy==1.21.6 decorator==5.1.1 sympy==1.4 cffi==1.12.3 pyyaml==6.0.1 pathlib2==2.3.7
-pip install pandas grpcio grpcio-tools protobuf==3.20.0 scipy==1.7.3 requests==2.31.0 
-pip install mpi4py==3.1.5 easydict==1.11 scikit-learn==1.0.2 attrs==23.2.0 psutil==5.9
-pip install setuptools==41.2.0 wheel==0.40.0
-HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir
 # Deactivate the environment
 conda deactivate
 
