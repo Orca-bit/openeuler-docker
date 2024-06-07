@@ -129,6 +129,7 @@ RUN curl -k -o /tmp/node.tar.xz https://nodejs.org/dist/v20.14.0/node-v20.14.0-l
     mkdir -p /usr/local/node && \
     tar -xJf /tmp/node.tar.xz -C /usr/local/node --strip-components=1 && \
     echo "export PATH=/usr/local/node/bin:\$PATH" >> /root/.zshrc && \
+    export PATH=/usr/local/node/bin:$PATH && \
     /usr/local/node/bin/npm install -g pyright && \
     rm /tmp/node.tar.xz
     
