@@ -141,9 +141,16 @@ RUN source ~/.bashrc && conda create -c conda-forge -n py38 python=3.8 && \
     mkdir -p /usr/local/lldb-dep/lib && \
     ln -s /opt/conda/lib/libedit.so.0.0.72 /usr/local/lldb-dep/lib/libedit.so.2 && \
     ln -s /opt/conda/envs/py38/lib/libpython3.8.so.1.0 /usr/local/lldb-dep/lib/libpython3.8.so.1.0 && \
+    ln -s /opt/conda/envs/py38/lib/libncurses.so.6.5 /usr/local/lldb-dep/lib/libncurses.so.6 && \
+    ln -s /opt/conda/envs/py38/lib/libpanel.so.6.5 /usr/local/lldb-dep/lib/libpanel.so.6 && \
+    ln -s /opt/conda/envs/py38/lib/libtinfo.so.6.5 /usr/local/lldb-dep/lib/libtinfo.so.6 && \
     ln -s /opt/conda/envs/py38/lib/libtinfow.so.6.5 /usr/local/lldb-dep/lib/libtinfow.so.6
 
 ENV LD_LIBRARY_PATH="/usr/local/lldb-dep/lib/:$LD_LIBRARY_PATH"
+
+# replace gcc
+RUN mv -f /usr/bin/g++ /usr/bin/g++.bak && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
 
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
