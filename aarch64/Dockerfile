@@ -21,6 +21,8 @@ RUN yum clean all && yum makecache && yum update -y && \
     sudo \
     make \
     m4 \
+    gcc \
+    gcc-c++ \
     kernel-headers \
     glibc-devel \
     glibc-headers \
@@ -94,17 +96,10 @@ RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
-# Ascend
-RUN wget -q --no-check-certificate -O /tmp/cann-toolkit.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-toolkit_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
-    wget -q --no-check-certificate -O /tmp/tfa.run https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C18SPC805/Ascend-cann-tfplugin_8.0.RC2.alpha002_linux-aarch64.run?response-content-type=application/octet-stream && \
-    cd /tmp && chmod +x *.run && ./cann-toolkit.run --full --force --quiet && ./tfa.run --install --force --quiet && \
-    rm /tmp/*.run
-
 RUN source ~/.bashrc && conda activate tf2 && \
     pip install numpy decorator sympy==1.4 cffi==1.12.3 pyyaml && \
     pip install pathlib2 pandas grpcio grpcio-tools scipy && \
-    pip install requests mpi4py easydict scikit-learn==0.20.0 attrs && \
-    pip install pyright
+    pip install requests mpi4py easydict scikit-learn==0.20.0 attrs
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
@@ -127,8 +122,24 @@ RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
     echo 'source /usr/local/Ascend/driver/bin/setenv.bash' >> /root/.zshrc  && \
     echo 'source /usr/local/Ascend/ascend-toolkit/set_env.sh' >> /root/.zshrc && \
     echo 'source /usr/local/Ascend/tfplugin/set_env.sh' >> /root/.zshrc && \
-    rm -rf /root/.cache/pyright-python/nodeenv && \
     sed -i '81s/==/=/g' /etc/profile.d/system-info.sh
+    
+# install node and pyright
+RUN curl -k -o /tmp/node.tar.xz https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-arm64.tar.xz && \
+    mkdir -p /usr/local/node && \
+    tar -xJf /tmp/node.tar.xz -C /usr/local/node --strip-components=1 && \
+    echo "export PATH=/usr/local/node/bin:\$PATH" >> /root/.zshrc && \
+    /usr/local/node/bin/npm install -g pyright && \
+    rm /tmp/node.tar.xz
+    
+# python3.8 and fix lldb-dap
+RUN source ~/.bashrc && conda create -n py38 python=3.8 && \
+    mkdir -p /usr/local/lldb-dep/lib && \
+    ln -s /opt/conda/lib/libedit.so.0.0.72 /usr/local/lldb-dep/lib/libedit.so.2 && \
+    ln -s /opt/conda/envs/py38/lib/libpython3.8.so.1.0 /usr/local/lldb-dep/lib/libpython3.8.so.1.0 && \
+    ln -s /opt/conda/envs/py38/lib/libtinfow.so.6.4 /usr/local/lldb-dep/lib/libtinfow.so.6
+
+ENV LD_LIBRARY_PATH="/usr/local/lldb-dep/lib/:$LD_LIBRARY_PATH"
 
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
