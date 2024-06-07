@@ -161,5 +161,13 @@ RUN source ~/.bashrc && conda create -c conda-forge -n py38 python=3.8 && \
 
 ENV LD_LIBRARY_PATH="/usr/local/lldb-dep/lib/:$LD_LIBRARY_PATH"
 
+# upgrade setuptools
+RUN source ~/.bashrc && conda activate tf1 && \
+    pip uninstall setuptools -y && \
+    pip install setuptools && \
+    conda activate tf2 && \
+    pip uninstall setuptools -y && \
+    pip install setuptools
+
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
