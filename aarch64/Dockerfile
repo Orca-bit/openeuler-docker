@@ -133,7 +133,7 @@ RUN curl -k -o /tmp/node.tar.xz https://nodejs.org/dist/v20.14.0/node-v20.14.0-l
     rm /tmp/node.tar.xz
     
 # python3.8 and fix lldb-dap
-RUN source ~/.bashrc && conda create -n py38 python=3.8 && \
+RUN source ~/.bashrc && conda create -c conda-forge -n py38 python=3.8 && \
     mkdir -p /usr/local/lldb-dep/lib && \
     ln -s /opt/conda/lib/libedit.so.0.0.72 /usr/local/lldb-dep/lib/libedit.so.2 && \
     ln -s /opt/conda/envs/py38/lib/libpython3.8.so.1.0 /usr/local/lldb-dep/lib/libpython3.8.so.1.0 && \
