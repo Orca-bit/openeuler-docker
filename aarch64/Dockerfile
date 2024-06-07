@@ -161,11 +161,5 @@ RUN source ~/.bashrc && conda create -c conda-forge -n py38 python=3.8 && \
 
 ENV LD_LIBRARY_PATH="/usr/local/lldb-dep/lib/:$LD_LIBRARY_PATH"
 
-# replace g++ c++
-RUN mv -f /usr/bin/g++ /usr/bin/g++.bak && \
-    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
-    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
-    update-alternatives --install /usr/bin/c++ g++ ${gcc7_install_dir}/bin/c++ 100
-
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
