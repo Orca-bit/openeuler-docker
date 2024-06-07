@@ -109,7 +109,7 @@ RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 RUN source ~/.bashrc && conda activate tf2 && \
     pip install numpy==1.19.5 decorator==5.1.1 sympy==1.4 cffi==1.12.3 pyyaml==6.0 && \
     pip install pathlib2==2.3.7 pandas grpcio grpcio-tools protobuf==3.20.0 scipy==1.7.3 && \
-    pip install requests==3.31.0 mpi4py==3.1.4 easydict==1.10 scikit-learn==1.0.2 attrs==23.1.0 && \
+    pip install requests==2.31.0 mpi4py==3.1.4 easydict==1.10 scikit-learn==1.0.2 attrs==23.1.0 && \
     pip install psutil==5.9 && \
     pip install setuptools==41.2.0 wheel==0.40.0 && \
     HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir
