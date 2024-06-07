@@ -85,7 +85,10 @@ ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
 
 # replace gcc g++
 RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
+    mv -f /usr/bin/g++ /usr/bin/g++.bak && \
+    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
     update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
+    update-alternatives --install /usr/bin/c++ g++ ${gcc7_install_dir}/bin/c++ 100 && \
     update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
 
 # Create Conda environments and install packages using pip
@@ -97,9 +100,12 @@ COPY create_conda_tf2_envs.sh /tmp/create_conda_envs.sh
 RUN sh /tmp/create_conda_envs.sh && rm -f /tmp/create_conda_envs.sh
 
 RUN source ~/.bashrc && conda activate tf2 && \
-    pip install numpy decorator sympy==1.4 cffi==1.12.3 pyyaml && \
-    pip install pathlib2 pandas grpcio grpcio-tools scipy && \
-    pip install requests mpi4py easydict scikit-learn==0.20.0 attrs
+    pip install numpy==1.19.5 decorator==5.1.1 sympy==1.4 cffi==1.12.3 pyyaml==6.0 && \
+    pip install pathlib2==2.3.7 pandas grpcio==1.56.0 grpcio-tools==1.56.0 scipy==1.7.3 && \
+    pip install requests==3.31.0 mpi4py==3.1.4 easydict==1.10 scikit-learn==1.0.2 attrs==23.1.0 && \
+    pip install psutil==5.9 && \
+    pip install setuptools==41.2.0 wheel==0.40.0 && \
+    HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
@@ -148,9 +154,11 @@ RUN source ~/.bashrc && conda create -c conda-forge -n py38 python=3.8 && \
 
 ENV LD_LIBRARY_PATH="/usr/local/lldb-dep/lib/:$LD_LIBRARY_PATH"
 
-# replace gcc
+# replace g++ c++
 RUN mv -f /usr/bin/g++ /usr/bin/g++.bak && \
-    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100
+    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
+    update-alternatives --install /usr/bin/c++ g++ ${gcc7_install_dir}/bin/c++ 100
 
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
