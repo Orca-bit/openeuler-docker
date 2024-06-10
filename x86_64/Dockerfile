@@ -10,6 +10,7 @@ COPY openEuler.repo /etc/yum.repos.d/
 
 # Install dependencies
 RUN yum clean all && yum makecache && yum update -y && \
+    dnf install gcc-toolset-7-gcc gcc-toolset-7-g++ -y && \
     yum install -y \
     bzip2 \
     curl \
@@ -25,13 +26,17 @@ RUN yum clean all && yum makecache && yum update -y && \
     kernel-headers \
     glibc-devel \
     glibc-headers \
-    glibc-static
+    glibc-static vim cmake unzip openmpi openmpi-devel
 
-COPY install_gcc.sh /tmp/
+ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
 
-RUN sh /tmp/install_gcc.sh && rm -f /tmp/install_gcc.sh
-
-RUN yum install -y openmpi openmpi-devel
+# replace gcc g++
+RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
+    update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
+    mv -f /usr/bin/g++ /usr/bin/g++.bak && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
+    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
+    update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100
 
 ENV PATH="/usr/lib64/openmpi/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH"
@@ -47,8 +52,11 @@ RUN wget --no-check-certificate -O /tmp/Miniconda3-latest-Linux-x86_64.sh https:
 
 ENV PATH="/opt/conda/bin:$PATH"
 
-# Update .condarc file to disable SSL verification and add conda-forge channel
-COPY .condarc /root/
+# git config
+RUN git config --global http.sslverify false && git config --global core.editor vim
+
+# Install zsh auto suggestions plugin
+RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
 # Create Conda environments and install packages using pip
 COPY create_conda_envs.sh /tmp/create_conda_envs.sh
@@ -80,9 +88,6 @@ RUN echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bash
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 ENV PATH="/home/linuxbrew/.linuxbrew/sbin:$PATH"
 
-# Install zsh auto suggestions plugin
-RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-
 ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
 
@@ -111,8 +116,17 @@ RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
     sh ~/.vim_runtime/install_basic_vimrc.sh && \
     rm -rf ~/.vim_runtime
 
-# git config
-RUN git config --global http.sslverify false && git config --global core.editor vim
+RUN echo "strict-ssl=false" >> /root/.npmrc && \
+    echo "registry=https://registry.npm.taobao.org" >> /root/.npmrc
+
+# install node and pyright
+RUN curl -k -o /tmp/node.tar.xz https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz && \
+    mkdir -p /usr/local/node && \
+    tar -xJf /tmp/node.tar.xz -C /usr/local/node --strip-components=1 && \
+    echo "export PATH=/usr/local/node/bin:\$PATH" >> /root/.zshrc && \
+    export PATH=/usr/local/node/bin:$PATH && \
+    /usr/local/node/bin/npm install -g pyright && \
+    rm /tmp/node.tar.xz
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
@@ -132,7 +146,9 @@ RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
     echo 'alias cg="cargo"' >> /root/.zshrc && \
     echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc && \
     echo 'eval "$(starship init zsh)"' >> ~/.zshrc && \
-    rm -rf /root/.cache/pyright-python/nodeenv && \
+    echo 'source /usr/local/Ascend/driver/bin/setenv.bash' >> /root/.zshrc  && \
+    echo 'source /usr/local/Ascend/ascend-toolkit/set_env.sh' >> /root/.zshrc && \
+    echo 'source /usr/local/Ascend/tfplugin/set_env.sh' >> /root/.zshrc && \
     sed -i '81s/==/=/g' /etc/profile.d/system-info.sh
 
 # Set zsh as the default shell in the Docker container
