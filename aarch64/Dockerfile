@@ -26,10 +26,27 @@ RUN yum clean all && yum makecache && yum update -y && \
     kernel-headers \
     glibc-devel \
     glibc-headers \
-    glibc-static vim cmake unzip openmpi openmpi-devel
+    glibc-static vim cmake unzip
 
-ENV PATH="/usr/lib64/openmpi/bin:$PATH"
-ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH"
+ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
+
+# replace gcc g++
+RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
+    update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
+    mv -f /usr/bin/g++ /usr/bin/g++.bak && \
+    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
+    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
+    update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100
+    
+# install openmpi
+RUN wget --no-check-certificate -O /tmp/openmpi.tar.gz https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.5.tar.gz && \
+    cd /tmp && tar -xvf openmpi.tar.gz && cd openmpi && ./configure --prefix=/usr/local/openmpi && \
+    make -j$(nproc) && \
+    make install && \
+    rm /tmp/openmpi.tar.gz
+
+ENV PATH="/usr/local/openmpi/bin:$PATH"
+ENV LD_LIBRARY_PATH="/usr/local/openmpi/lib:$LD_LIBRARY_PATH"
 
 # Change default shell to zsh
 RUN chsh -s /bin/zsh && echo "source /etc/profile" >> ~/.zshrc
@@ -80,16 +97,6 @@ COPY helix/themes/* /root/.config/helix/themes/
 RUN git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime && \
     sh ~/.vim_runtime/install_basic_vimrc.sh && \
     rm -rf ~/.vim_runtime
-
-ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
-
-# replace gcc g++
-RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
-    update-alternatives --install /usr/bin/gcc gcc ${gcc7_install_dir}/bin/gcc 100 && \
-    mv -f /usr/bin/g++ /usr/bin/g++.bak && \
-    update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
-    mv -f /usr/bin/c++ /usr/bin/c++.bak && \
-    update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100
 
 # Create Conda environments and install packages using pip
 COPY create_conda_tf1_envs.sh /tmp/create_conda_envs.sh
