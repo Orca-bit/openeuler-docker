@@ -167,7 +167,8 @@ RUN source ~/.bashrc && conda activate tf1 && \
     pip install setuptools && \
     conda activate tf2 && \
     pip uninstall setuptools -y && \
-    pip install setuptools
+    pip install setuptools && \
+    rm -f /core.*
 
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
