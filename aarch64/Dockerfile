@@ -39,11 +39,11 @@ RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
     update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100
     
 # install openmpi
-RUN wget --no-check-certificate -O /tmp/openmpi.tar.gz https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.5.tar.gz && \
-    cd /tmp && tar -xvf openmpi.tar.gz && cd openmpi && ./configure --prefix=/usr/local/openmpi && \
+RUN wget --no-check-certificate -O /tmp/openmpi-4.1.5.tar.gz https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.5.tar.gz && \
+    cd /tmp && tar -xvf openmpi-4.1.5.tar.gz && cd openmpi-4.1.5 && ./configure --prefix=/usr/local/openmpi && \
     make -j$(nproc) && \
     make install && \
-    rm /tmp/openmpi.tar.gz
+    rm /tmp/openmpi-4.1.5.tar.gz
 
 ENV PATH="/usr/local/openmpi/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/openmpi/lib:$LD_LIBRARY_PATH"
