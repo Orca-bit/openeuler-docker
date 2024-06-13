@@ -123,6 +123,7 @@ RUN source ~/.bashrc && conda activate tf2 && \
 
 # Configure zsh
 RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc && \
+    echo "export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#696969'" >> ~/.zshrc && \
     echo 'source /opt/conda/etc/profile.d/conda.sh' >> /root/.zshrc && \
     echo 'conda activate tf2' >> /root/.zshrc  && \
     echo 'export LC_ALL="C.UTF-8"' >> /root/.zshrc && \
