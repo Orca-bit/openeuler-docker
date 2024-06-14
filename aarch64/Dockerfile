@@ -73,7 +73,7 @@ COPY rust.cer /etc/pki/ca-trust/source/anchors/
 RUN update-ca-trust && \
     curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile && \
-    rustc --version
+    /root/.cargo/bin/rustup --version
 
 # install ra
 RUN /root/.cargo/bin/rustup component add rust-analyzer
