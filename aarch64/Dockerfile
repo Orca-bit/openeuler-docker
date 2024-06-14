@@ -90,7 +90,6 @@ RUN /tmp/install_packages.sh llvm && \
     /tmp/install_packages.sh starship && \
     /tmp/install_packages.sh tokei && \
     /tmp/install_packages.sh gitui && \
-    /tmp/install_packages.sh broot && \
     /tmp/install_packages.sh delta && \
     /tmp/install_packages.sh fd && \
     /tmp/install_packages.sh zoxide && \
