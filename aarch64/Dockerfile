@@ -65,12 +65,23 @@ RUN git config --global http.sslverify false && git config --global core.editor 
 # Install zsh auto suggestions plugin
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
+# install rust
+ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
+ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
+COPY rust.cer /etc/pki/ca-trust/source/anchors/
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
+    echo 'source $HOME/.cargo/env' >> /etc/profile && \
+    rustc --version
+
+# install ra
+RUN /root/.cargo/bin/rustup component add rust-analyzer
+
 # Install precompiled packages
 COPY install_packages.sh /tmp/
 RUN chmod +x /tmp/install_packages.sh
 
 RUN /tmp/install_packages.sh llvm && \
-    /tmp/install_packages.sh rust && \
     /tmp/install_packages.sh helix && \
     /tmp/install_packages.sh lsd && \
     /tmp/install_packages.sh hyperfine && \
