@@ -26,7 +26,7 @@ RUN yum clean all && yum makecache && yum update -y && \
     kernel-headers \
     glibc-devel \
     glibc-headers \
-    glibc-static vim cmake unzip openmpi openmpi-devel
+    glibc-static unzip
 
 ENV gcc7_install_dir=/opt/openEuler/gcc-toolset-7/root/usr/
 
@@ -38,8 +38,15 @@ RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
     mv -f /usr/bin/c++ /usr/bin/c++.bak && \
     update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100
 
-ENV PATH="/usr/lib64/openmpi/bin:$PATH"
-ENV LD_LIBRARY_PATH="/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH"
+# install openmpi
+RUN wget --no-check-certificate -O /tmp/openmpi-4.1.5.tar.gz https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.5.tar.gz && \
+    cd /tmp && tar -xvf openmpi-4.1.5.tar.gz && cd openmpi-4.1.5 && ./configure --prefix=/usr/local/openmpi && \
+    make -j$(nproc) && \
+    make install && \
+    rm /tmp/openmpi-4.1.5.tar.gz
+
+ENV PATH="/usr/local/openmpi/bin:$PATH"
+ENV LD_LIBRARY_PATH="/usr/local/openmpi/lib:$LD_LIBRARY_PATH"
 
 # Change default shell to zsh
 RUN chsh -s /bin/zsh && echo "source /etc/profile" >> ~/.zshrc
@@ -51,6 +58,17 @@ RUN wget --no-check-certificate -O /tmp/Miniconda3-latest-Linux-x86_64.sh https:
     /opt/conda/bin/conda clean --all --yes
 
 ENV PATH="/opt/conda/bin:$PATH"
+
+RUN source ~/.bashrc && conda activate tf1 && \
+    pip install setuptools==41.2.0 wheel==0.40.0 && \
+    HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir && \
+    pip uninstall setuptools -y && \
+    pip install setuptools && \
+    source ~/.bashrc && conda activate tf2 && \
+    pip install setuptools==41.2.0 wheel==0.40.0 && \
+    HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir && \
+    pip uninstall setuptools -y && \
+    pip install setuptools
 
 # git config
 RUN git config --global http.sslverify false && git config --global core.editor vim
@@ -90,9 +108,11 @@ ENV PATH="/home/linuxbrew/.linuxbrew/sbin:$PATH"
 
 ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
 ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"    
+COPY rust.cer /etc/pki/ca-trust/source/anchors/
 
 # Install Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
+RUN update-ca-trust && \
+    curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y && \
     echo 'source $HOME/.cargo/env' >> /etc/profile
 
 # install ra
@@ -149,7 +169,8 @@ RUN echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
     echo 'source /usr/local/Ascend/driver/bin/setenv.bash' >> /root/.zshrc  && \
     echo 'source /usr/local/Ascend/ascend-toolkit/set_env.sh' >> /root/.zshrc && \
     echo 'source /usr/local/Ascend/tfplugin/set_env.sh' >> /root/.zshrc && \
-    sed -i '81s/==/=/g' /etc/profile.d/system-info.sh
+    sed -i '81s/==/=/g' /etc/profile.d/system-info.sh && \
+    rm -f /core.*
 
 # Set zsh as the default shell in the Docker container
 CMD ["/bin/zsh"]
