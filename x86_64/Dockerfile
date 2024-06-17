@@ -59,17 +59,6 @@ RUN wget --no-check-certificate -O /tmp/Miniconda3-latest-Linux-x86_64.sh https:
 
 ENV PATH="/opt/conda/bin:$PATH"
 
-RUN source ~/.bashrc && conda activate tf1 && \
-    pip install setuptools==41.2.0 wheel==0.40.0 && \
-    HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir && \
-    pip uninstall setuptools -y && \
-    pip install setuptools && \
-    source ~/.bashrc && conda activate tf2 && \
-    pip install setuptools==41.2.0 wheel==0.40.0 && \
-    HOROVOD_WITH_MPI=1 HOROVOD_WITH_TENSORFLOW=1 pip install horovod --no-cache-dir && \
-    pip uninstall setuptools -y && \
-    pip install setuptools
-
 # git config
 RUN git config --global http.sslverify false && git config --global core.editor vim
 
