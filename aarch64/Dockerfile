@@ -36,7 +36,13 @@ RUN mv -f /usr/bin/gcc /usr/bin/gcc.bak && \
     mv -f /usr/bin/g++ /usr/bin/g++.bak && \
     update-alternatives --install /usr/bin/g++ g++ ${gcc7_install_dir}/bin/g++ 100 && \
     mv -f /usr/bin/c++ /usr/bin/c++.bak && \
-    update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100
+    update-alternatives --install /usr/bin/c++ c++ ${gcc7_install_dir}/bin/c++ 100 && \
+    mv -f /usr/bin/aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc.bak && \
+    update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc ${gcc7_install_dir}/bin/aarch64-openEuler-linux-gcc 100 && \
+    mv -f /usr/bin/aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++.bak && \
+    update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ ${gcc7_install_dir}/bin/aarch64-openEuler-linux-g++ 100 && \
+    mv -f /usr/bin/aarch64-linux-gnu-c++ /usr/bin/aarch64-linux-gnu-c++.bak && \
+    update-alternatives --install /usr/bin/aarch64-linux-gnu-c++ aarch64-linux-gnu-c++ ${gcc7_install_dir}/bin/aarch64-openEuler-linux-c++ 100
     
 # install openmpi
 RUN wget --no-check-certificate -O /tmp/openmpi-4.1.5.tar.gz https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.5.tar.gz && \
